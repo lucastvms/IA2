@@ -4,80 +4,79 @@ from operator import itemgetter
 # http://www.dainf.ct.utfpr.edu.br/~tacla/IA/016a-AlgGeneticos.pdf
 # https://pythonhelp.wordpress.com/2012/06/15/por-que-__name__-__main__/
 
-# 1. Geração de população
-# Matriz com os cromossomos sendo representados por listas, gerados de forma aleatória
-def gerar(n_linhas, n_colunas):
-    pop = [] # População
-    linha = [] # Cromossomo
 
-    # gera cromossomos aleatórios e binários
+# Geração
+def gerar(n_linhas, n_colunas):
+    pop = []
+    cromossomo = []
+
+    # Gera cromossomos aleatórios e binários
     while n_linhas != len(pop):
         n = random.randint(0, 1)
-        linha.append(n)
+        cromossomo.append(n)
 
-        if len(linha) == n_colunas:
-            pop.append(linha)
-            linha = []
+        if len(cromossomo) == n_colunas:
+            pop.append(cromossomo)
+            cromossomo = []
 
-
-    print(pop, "\n")
+    # for i in range(0, len(pop)):
+    #     print("\n", pop[i])
 
     return pop
 
 
-# 2. Adaptação
-# Avaliar o peso dos cromossomos, para saber o ranking deles
-def adaptar(pop, pesos, origem, destino):
-    fitness = [] # lista do fitness/ranking dos cromossomos
+# Adaptação
+def adaptar(pop, pesos, origem, destino, cidades):
+    fitness = []
 
-    # cria fitness
     for i in range(0, 10):
         peso = 0
-        lista_caminho = [] # guarda as origens e os destinos
+        lista_origem = []
+        lista_destino = []
 
+        # Cria caminho
         for j in range(0, 12):
             if pop[i][j] == 1:
                 peso += pesos[j]
-                lista_caminho.append(origem[j])
-                lista_caminho.append(destino[j])
-                if lista_caminho.count(origem[j]) > 2 or lista_caminho.count(origem[j]) > 2:
-                    peso = 10000
+                lista_origem.append(origem[j])
+                lista_destino.append(destino[j])
+
+        # Verifica se há penalidade máxima >>> FALTA CONTADOR PARA VER SE PASSOU EM TODAS AS CIDADES
+        for j in range(0, len(lista_destino)):
+            if lista_destino.count(lista_origem[j]) > 0: lista_destino.remove(lista_origem[j])
+
+        if lista_destino:
+            peso = 10000
+
+        print(lista_origem)
+        print(lista_destino)
 
         fitness.append(peso)
 
+    # Ordenação
+
     print(fitness, "\n")
-    fitness.sort()
-    pop[:].extend(fitness)
-    pop = sorted(pop, key=itemgetter(len(pop)-1))
+    print('POP: \n', pop)
+    fitness = list(fitness)
+    fitness, pop[:] = zip(*sorted(zip(fitness, pop[:])))
 
-    print(pop)
+    print(fitness, '\n')
+    print('POP: \n', pop)
 
-    #aux = zip(fitness,  pop for i in range(0, 10))
-    #print (aux)
-    #fitness, pop[]= zip(*sorted(zip(fitness, pop[]))
 
     return fitness
 
 
+# Variáveis do problema
 
-
-
-
-
-#200. Main
-
-# cidades: a, b, c, d
-# arcos: 1- a,b ; 2- a,c ; 3- a,d ; 4- b,a ; 5- b,c ; 6- b,d ; 7- c,a ; 8- c,b ; 9- c,d ; 10- d,a ; 11- d,b ; 12- d,c
-
-pesos = [1, 5, 4, 1, 2, 6, 5, 2, 3, 4, 5, 3]
+cidades = ['a', 'b', 'c', 'd']
 origem = ['a', 'a', 'a', 'b', 'b', 'b', 'c', 'c', 'c', 'd', 'd', 'd']
 destino = ['b', 'c', 'd', 'a', 'c', 'd', 'a', 'b', 'd', 'a', 'b', 'c']
+pesos = [1, 5, 4, 1, 2, 6, 5, 2, 3, 4, 6, 3]
+
+# Chamada das funções
+
 pop = gerar(10, 12)
-print (adaptar(pop, pesos, origem, destino))
-#201. Testes
-
-
-#print m[0][1]
-#for i in range (0, 10):    print i
+adaptar(pop, pesos, origem, destino, cidades)
 
 
