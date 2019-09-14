@@ -108,6 +108,7 @@ def mutation(ch):
 
 
 #MAIN
+
 pop = gen_first_pop()
 parents = parents_prob(pop)
 
