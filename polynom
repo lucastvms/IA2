@@ -1,0 +1,53 @@
+def function(x, y, k, op):
+    if(op=='+'):
+        return x + y + k
+    elif(op=='-'):
+        return x - y + k
+    elif(op=='*'):
+        return x * y + k
+    elif(op=='/' and y!=0):
+        return x / y + k
+    return ;
+
+# a*x $ b*y = ans , $ one of the operations: +, -, *, /
+x = [0, 0, 1, 1]
+y = [0, 1, 0, 1]
+ans = [-1, 2, 1, 4]
+
+#initialize static value, a and b as zero, count for right solutions[+,-,*,/], shortcut flags for a and b = false
+k=a=b=0
+count={'+': 0,'-': 0,'*': 0,'/': 0}
+Fa=Fb=0
+
+#heuristic to try and solve the problem faster:
+#a=0 and b=0, we discover its static part:
+for i in range(0, 4):
+    if x[i]==0 and y[i]==0:
+        k=ans[i]
+        break
+
+#with the updated answers we can discover x if b=0 or y if a=0:
+for i in range(0,4):
+    if x[i]==0 and y[i]!=0:
+        b=ans[i] // y[i] - k
+        fB=1
+    elif y[i]==0 and x[i]!=0:
+        a=ans[i] // x[i] - k
+        fA=1
+        break
+
+#using the values of a and b found we just need to calculate which are our operator
+if(fA==1 and fB==1):
+    for i in range(0,4):
+        for op in count:
+            if(function(a * x[i], b * y[i], k, op) == ans[i]):
+                count[op] += 1
+
+#now we evaluate if we've got an expression that satisfies all our 4 results shown in the matrixes x, y and ans
+for op in count:
+    for i in range(0,4):
+        if(count[op]>=4):
+            print(a,"*", x[i], op, b,"*", y[i], k,"=",ans[i])
+            if(i==3):
+                print("\nExpression:",a,"* x",op,b,"* y", k)
+
