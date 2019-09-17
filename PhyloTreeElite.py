@@ -207,7 +207,7 @@ def best_fit(correct_tree, random_forest):
 
 #  GLOBAL VARIABLES
 _SPE_SIZE = 5  # maximum = alphabet letters = 26
-_FOREST_SIZE = 2*_SPE_SIZE
+_FOREST_SIZE = 4*_SPE_SIZE
 _NULL_VALUE = 900
 _PROB_CUT = 0.20
 _PROB_MUT = 0.20
@@ -258,7 +258,7 @@ def main():
         new_random_forest = []
         best_fit_value = best_fit(species_fitness, random_forest)[1]
 
-        for j in range(_SPE_SIZE):
+        for j in range(_FOREST_SIZE//2):
             dad_index = selection(reproduction_chance)
             dad = random_forest[dad_index]
             reproduction_chance[dad_index] = 0
@@ -278,7 +278,7 @@ def main():
             else:
                 new_random_forest.append(mutated_daughter)
 
-        for j in range(_SPE_SIZE, _SPE_SIZE*2):
+        for j in range(_FOREST_SIZE//2, _FOREST_SIZE):
             best_fit_index = best_fit(species_fitness, random_forest)[0]
             new_random_forest.append(random_forest[best_fit_index])
             reproduction_chance[best_fit_index] = 0
